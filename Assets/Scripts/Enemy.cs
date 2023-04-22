@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
+using Photon.Pun;
 
-public class EnemyAI : MonoBehaviour
+public class Enemy : MonoBehaviourPunCallbacks
 {
+    [SerializeField] int health = 100;
     public NavMeshAgent agent;
     public Transform player;
-    public LayerMask isGround, isPlayer;
+    public LayerMask ground, isPlayer;
     public GameObject gameOver;
     public GameObject jumpScare;
     //public FirstPersonController firstPersonControllerScript;
@@ -67,7 +69,7 @@ public class EnemyAI : MonoBehaviour
 
         walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
 
-        if (Physics.Raycast(walkPoint, -transform.up, 2f, isGround))
+        if (Physics.Raycast(walkPoint, -transform.up, 2f, ground))
             isWPSet = true;
     }
 
@@ -92,18 +94,19 @@ public class EnemyAI : MonoBehaviour
         //Debug.Log("You died");
     }
 
-    // public IEnumerator startJumpscare()
-    // {
-    //     AudioManager.Instance.PlayAudio("EnemyJumpscare");
+    public void DamageEnemy(int damage)
+    {
+        health -= damage;
+        if (health <= 0)
+        {
+            Destroy();
+        }
+    }
 
-    //     jumpScare.SetActive(true);
-    //     yield return new WaitForSeconds(1f);
-    //     gameOver.SetActive(true);
-    //     firstPersonControllerScript.enabled = false;
-    //     playerScript.enabled = false;
-    //     Cursor.visible = true;
-    //     Cursor.lockState=CursorLockMode.None;
-    // }
+    public void Destroy()
+    {
+        Destroy(this.gameObject);
+    }
 
     private void OnDrawGizmos()
     {

@@ -13,10 +13,10 @@ public class AudioManager : MonoBehaviour
     void Awake() {
         if(!Instance) {
             Instance = this;
-            audioPrefab = Resources.Load<GameObject>("Prefabs/Audio");
-            untimedAudioPrefab = Resources.Load<GameObject>("Prefabs/UntimedAudio");
-            spatialAudioPrefab = Resources.Load<GameObject>("Prefabs/SpatialAudio");
-            loopingAudioPrefab = Resources.Load<GameObject>("Prefabs/LoopingAudio");
+            audioPrefab = Resources.Load<GameObject>("Prefabs/Audio/Audio");
+            untimedAudioPrefab = Resources.Load<GameObject>("Prefabs/Audio/UntimedAudio");
+            spatialAudioPrefab = Resources.Load<GameObject>("Prefabs/Audio/SpatialAudio");
+            loopingAudioPrefab = Resources.Load<GameObject>("Prefabs/Audio/LoopingAudio");
             musicPrefab = Resources.Load<GameObject>("Prefabs/Music");
             walkingAudioClip = Resources.Load<AudioClip>("Audio/Looping/Walking");
             runningAudioClip = Resources.Load<AudioClip>("Audio/Looping/Running");
