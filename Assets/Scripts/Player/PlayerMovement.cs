@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviourPun
     [SerializeField] private float _moveSpeed = 5f;
     private Rigidbody rb;
     [SerializeField] private List<Color> _playerAssignmentColors;
-    [SerializeField] private TMP_Text _playerName;
+    //[SerializeField] private TMP_Text _playerName;
 
     private SpriteRenderer _spriteRenderer;
 
@@ -24,10 +24,10 @@ public class PlayerMovement : MonoBehaviourPun
 
     private void Start()
     {
-        // Color assignment =
-        // _playerAssignmentColors[Mathf.Min(photonView.Controller.ActorNumber - 1, _playerAssignmentColors.Count - 1)];
-        // _spriteRenderer.color = assignment;
-        // _playerName.text = photonView.Controller.NickName;
+        //Color assignment =
+        //_playerAssignmentColors[Mathf.Min(photonView.Controller.ActorNumber - 1, _playerAssignmentColors.Count - 1)];
+        //_spriteRenderer.color = assignment;
+        //_playerName.text = photonView.Controller.NickName;
     }
 
     private void Update()

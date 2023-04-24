@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PlayFabEditorPrefsSO
   m_EditorClassIdentifier: 
   DevAccountEmail: franz.virgino@ciit.edu.ph
-  DevAccountToken: ko3cuaz6ic4kk3zd5dk14n3iej1c3in5kzfimasjppzheigh4z7htcj4fq8e7erymo9f4jkje3mgphnzgf79dyi4dm5de77exos881e8qzk3x9qzj8sdoeqyey69z785r6mxhm8ascfi1k9sxscf1o8ow9mgi4mzuj3nfda3bgghrgaate3xykgosedpwxbquuma4gqn
+  DevAccountToken: bemohtf1fyrkbmqtxoria78ds4cisga6acm6d7uxon69au37kcphnew1ewjnsa8t5oq18ma9qjjmefezjt7hzp7ye1jkrqx49g85w4snxc5ry8cojyqd7pagcen5thq176rfanwzhskfdqpycc473xmkpg4y513ihh1hquy9bkn9qr9irztbh6eathc8adkd1n34bc4g
   AadAuthorization: 
   SelectedStudio: EMC209
   SdkPath: Assets/PlayFabSDK

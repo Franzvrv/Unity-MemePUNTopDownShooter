@@ -24,7 +24,7 @@ public class InRoomPanel : MonoBehaviour
 
     private void StartGame()
     {
-        PhotonNetwork.LoadLevel("Gameplay");
+        PhotonNetwork.LoadLevel("Project Gameplay");
     }
 
     private void LeaveRoom()

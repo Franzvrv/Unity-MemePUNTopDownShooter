@@ -52,7 +52,7 @@ namespace Photon.Pun.Demo.PunBasics
 		// [SerializeField] private List<RoomInfoContainer> _roomContainerList;
 		[SerializeField] private Transform _lobbyContainerParent;
 		//[SerializeField] private CreateRoomPanel _createRoomPanel;
-		[SerializeField] private InRoomPanel _inRoomPanel;
+		//[SerializeField] private InRoomPanel _inRoomPanel;
 		[SerializeField] private GameObject _playerLobbyInstance;
 		[SerializeField] private GameObject _PlayerDetails;
 		private GameObject playerLobbyInstance;
@@ -95,7 +95,7 @@ namespace Photon.Pun.Demo.PunBasics
 		{
 			_lobbyContainerParent.gameObject.SetActive(false);	
 			//_createRoomPanel.gameObject.SetActive(false);
-			_inRoomPanel.gameObject.SetActive(false);
+			//_inRoomPanel.gameObject.SetActive(false);
 			_PlayerDetails.SetActive(false);
 			
 			//_roomContainerList = new List<RoomInfoContainer>();
@@ -259,7 +259,7 @@ namespace Photon.Pun.Demo.PunBasics
         {
 	        _lobbyContainerParent.gameObject.SetActive(false);
 	        //_createRoomPanel.gameObject.SetActive(false);
-	        _inRoomPanel.gameObject.SetActive(true);
+	        //_inRoomPanel.gameObject.SetActive(true);
 	        UpdateRoomStatistics();
         }
 
@@ -267,7 +267,7 @@ namespace Photon.Pun.Demo.PunBasics
         {
 	        _lobbyContainerParent.gameObject.SetActive(true);
 	        //_createRoomPanel.gameObject.SetActive(true);
-	        _inRoomPanel.gameObject.SetActive(false);
+	        //_inRoomPanel.gameObject.SetActive(false);
 	        UpdateRoomStatistics();
         }
 

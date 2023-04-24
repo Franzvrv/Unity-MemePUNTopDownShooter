@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class PlayerAim : MonoBehaviour
+public class PlayerAim : MonoBehaviourPun
 {
+    [SerializeField] private Transform playerTransform;
     [SerializeField] private Transform firePoint;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private LayerMask aimMask;
     private Rigidbody rb;
     [SerializeField] float bulletForce = 10f;
+    [SerializeField] private GameObject _cameraPrefab;
     public Camera mainCamera;
 
 
@@ -16,24 +19,24 @@ public class PlayerAim : MonoBehaviour
 
     void Awake() {
         rb = GetComponent<Rigidbody>();
-        mainCamera = Camera.main;
+        if (photonView.IsMine) {
+            GameObject camera = new GameObject();
+            camera = Instantiate(_cameraPrefab, _cameraPrefab.transform);
+            camera.transform.SetParent(playerTransform, false);
+            mainCamera = Camera.main;
+        }
     }
 
     void Update()
     {
-        Aim();
-        if (Input.GetMouseButtonDown(0))
-        {
-            //SoundManager.Playsound("Bang");
-            Shoot();
+        if (photonView.IsMine) {
+            Aim();
+            if (Input.GetMouseButtonDown(0))
+            {
+                //SoundManager.Playsound("Bang");
+                Shoot();
+            }
         }
-    }
-
-    void Shoot()
-    {
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-        Rigidbody rb = bullet.GetComponent<Rigidbody>();
-        rb.AddForce(firePoint.forward * bulletForce, ForceMode.Impulse);
     }
 
     private (bool success, Vector3 position) GetMousePosition() {
@@ -53,5 +56,13 @@ public class PlayerAim : MonoBehaviour
             var direction = position - transform.position;
             transform.forward = direction;
         }
+    }
+
+    [PunRPC]
+    void Shoot()
+    {
+        GameObject bullet = PhotonNetwork.Instantiate("Prefabs/Bullet", firePoint.position, firePoint.rotation);
+        Rigidbody rb = bullet.GetComponent<Rigidbody>();
+        rb.AddForce(firePoint.forward * bulletForce, ForceMode.Impulse);
     }
 }

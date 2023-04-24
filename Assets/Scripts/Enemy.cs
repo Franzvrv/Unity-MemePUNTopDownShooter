@@ -11,11 +11,6 @@ public class Enemy : MonoBehaviourPunCallbacks
     public NavMeshAgent agent;
     public Transform player;
     public LayerMask ground, isPlayer;
-    public GameObject gameOver;
-    public GameObject jumpScare;
-    //public FirstPersonController firstPersonControllerScript;
-    //public Player playerScript;
-
     public Vector3 walkPoint;
     bool isWPSet;
     public float walkPointRange;
@@ -26,7 +21,7 @@ public class Enemy : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-        player = GameObject.Find("Player").transform;
+        
         agent = GetComponent<NavMeshAgent>();
         
     }
@@ -39,38 +34,11 @@ public class Enemy : MonoBehaviourPunCallbacks
         // if (!playerInSight && !playerInAttackRange) Patrolling();
         // if (playerInSight && !playerInAttackRange) Chasing() ;
         //if (playerInSight && playerInAttackRange) Attacking();
-        Chasing() ;
-    }
-
-    private void Patrolling()
-    {
-        agro = false;
-        if (!isWPSet) SearchWalkPoint();
-
-        if (isWPSet)
-            agent.SetDestination(walkPoint);
-
-        Vector3 distanceToWP = transform.position - walkPoint;
-
-        if (distanceToWP.magnitude < 1f || WPSetTimer <= 0) {
-            isWPSet = false;
-            WPSetTimer = 10;
-            
+        if (player == null) {
+            player = GameManager.Instance.players[0].transform;
         } else {
-            WPSetTimer -= Time.deltaTime;
+            Chasing() ;
         }
-            
-    }
-
-    private void SearchWalkPoint()
-    {
-        float randomZ = Random.Range(-walkPointRange, walkPointRange);
-        float randomX = Random.Range(-walkPointRange, walkPointRange);
-
-        walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
-
-        if (Physics.Raycast(walkPoint, -transform.up, 2f, ground))
-            isWPSet = true;
     }
 
     private void Chasing()
@@ -80,18 +48,6 @@ public class Enemy : MonoBehaviourPunCallbacks
         //     agro = true;
         // }
         agent.SetDestination(player.position);
-    }
-    private void Attacking()
-    {
-        if (!jumpscare) {
-            jumpscare = true;
-            agent.SetDestination(transform.position);
-            //StartCoroutine(startJumpscare());
-        }
-        
-        
-        //Time.timeScale = 0f;
-        //Debug.Log("You died");
     }
 
     public void DamageEnemy(int damage)
@@ -106,6 +62,11 @@ public class Enemy : MonoBehaviourPunCallbacks
     public void Destroy()
     {
         Destroy(this.gameObject);
+    }
+
+    IEnumerator playerSearch() {
+        
+        yield break;
     }
 
     private void OnDrawGizmos()
