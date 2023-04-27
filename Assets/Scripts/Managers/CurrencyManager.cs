@@ -7,7 +7,45 @@ using UnityEngine;
 
 public class CurrencyManager : MonoBehaviour
 {
+    public static CurrencyManager Instance;
+    public event Action CheckBalanceSuccessEvent;
     private int _coAmount;
+
+
+    void Awake() {
+        if(!Instance) {
+            Instance = this;
+            return;
+        }
+
+        if (Instance && Instance != this) {
+            Destroy(gameObject);
+            return;
+        }
+    }
+
+    void Start() {
+        CheckBalance();
+    }
+
+    public void CheckBalance()
+    {
+        PlayFabClientAPI.GetUserInventory( new GetUserInventoryRequest(), (success) =>
+        {
+            foreach (var keyValuePair in success.VirtualCurrency)
+            {
+                Init(keyValuePair.Key, keyValuePair.Value);
+            }
+
+            CheckBalanceSuccessEvent?.Invoke();
+            
+            InventoryManager.Instance.UpdateInventory(success.Inventory);
+            
+        }, (failure) =>
+        {
+            
+        });
+    }
     
     public void Init(string currencyCode, int balance) 
     { 

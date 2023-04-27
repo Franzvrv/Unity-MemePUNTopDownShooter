@@ -9,40 +9,47 @@ public class Enemy : MonoBehaviourPunCallbacks
 {
     [SerializeField] private int health = 100;
     [SerializeField] private float walkSpeed = 5;
-    public NavMeshAgent agent;
-    public Transform player;
-    public LayerMask ground, isPlayer;
-    public Vector3 walkPoint;
-    //bool isWPSet;
-    //public float walkPointRange;
-
-    //public float sightRange, attackRange;
-    //public bool playerInSight, playerInAttackRange, agro = false, jumpscare = false;
+    [SerializeField] private int targetPlayerID = 0;
+    private NavMeshAgent agent;
+    private LayerMask ground, isPlayer;
+    private Vector3 walkPoint;
+    
     public float WPSetTimer = 7;
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         agent.speed = walkSpeed;
+        StartCoroutine(playerSearch());
     }
 
     private void Update()
     {
-        Transform closestPlayer = null;
-        float closestDistance = 9999999999;
+        
 
-        foreach (GameObject player in GameManager.Instance.players) {
-            if (closestPlayer == null || Vector3.Distance(player.transform.position, transform.position) < closestDistance) {
-                closestPlayer = player.transform;
-                closestDistance = Vector3.Distance(player.transform.position, transform.position);
-            }
+
+
+        //Debug.Log(GameManager.Instance.players.Count + " - " + closestDistance);
+    }
+
+    void FixedUpdate() {
+        if (targetPlayerID != 0) {
+            agent.SetDestination(PhotonView.Find(targetPlayerID).gameObject.transform.position);
         }
-
-        agent.SetDestination(closestPlayer.position);
     }
 
     IEnumerator playerSearch() {
-        yield break;
+        while (true) {
+        float closestDistance = 9999999999;
+            foreach (int playerID in GameManager.Instance.playerIDs) {
+                GameObject player = PhotonView.Find(playerID).gameObject;
+                if (Vector3.Distance(player.transform.position, transform.position) < closestDistance) {
+                    targetPlayerID = playerID;
+                    closestDistance = Vector3.Distance(player.transform.position, transform.position);
+                }
+            }
+            yield return new WaitForSeconds(1.1f);
+        }
     }
 
     public void DamageEnemy(int damage) {
@@ -55,12 +62,7 @@ public class Enemy : MonoBehaviourPunCallbacks
         health -= damage;
         if (health <= 0)
         {
-            Destroy();
+            PhotonNetwork.Destroy(this.gameObject);
         }
-    }
-
-    public void Destroy()
-    {
-        Destroy(this.gameObject);
     }
 }

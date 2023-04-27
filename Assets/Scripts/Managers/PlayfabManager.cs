@@ -9,14 +9,14 @@ using UnityEngine.SceneManagement;
 
 public class PlayfabManager : MonoBehaviour
 {
-        [Header("Panels")]
+    [Header("Panels")]
     [SerializeField] private LoginPanel _login;
     [SerializeField] private RegistrationPanel _registration;
     [Space(20)]
     [Header("Managers")]
     [SerializeField] private ExperienceManager _experienceManager;
     [SerializeField] private CurrencyManager _currencyManager;
-    //[SerializeField] private InventoryManager _inventoryManager;
+    [SerializeField] private InventoryManager _inventoryManager;
     [SerializeField] private StoreManager _storeManager;
     [Space(20)]
     [Header("Login Config")]
@@ -26,7 +26,7 @@ public class PlayfabManager : MonoBehaviour
     
     public ExperienceManager ExperienceManager => _experienceManager;
     public CurrencyManager CurrencyManager => _currencyManager;
-    //public InventoryManager InventoryManager => _inventoryManager;
+    public InventoryManager InventoryManager => _inventoryManager;
     public StoreManager StoreManager => _storeManager;
 
     private void Awake()

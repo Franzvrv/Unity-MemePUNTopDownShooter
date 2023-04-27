@@ -1,16 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviourPun, IPunObservable
 {
     public static GameManager Instance;
-    public List<GameObject> players = new List<GameObject>();
+    [SerializeField] public List<int> playerIDs = new List<int>();
 
     void Awake() {
         if(!Instance) {
             Instance = this;
-            DontDestroyOnLoad(this.gameObject);
             return;
         }
 
@@ -20,7 +20,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void AddPlayer(GameObject player) {
-        players.Add(player);
+    public void AddPlayer(int viewID) {
+        playerIDs.Add(viewID);
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(playerIDs);
+        } else
+        {
+            playerIDs = (List<int>)stream.ReceiveNext();
+        }
     }
 }

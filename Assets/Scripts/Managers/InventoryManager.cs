@@ -4,11 +4,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using PlayFab;
 using PlayFab.ClientModels;
-using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
     private List<ItemInstance> _currentInventory = new List<ItemInstance>();
+
+    public static InventoryManager Instance;
+
+    void Awake() {
+        if(!Instance) {
+            Instance = this;
+            return;
+        }
+
+        if (Instance && Instance != this) {
+            Destroy(gameObject);
+            return;
+        }
+    }
 
     public void UpdateInventory(List<ItemInstance> items)
     {
@@ -45,5 +58,9 @@ public class InventoryManager : MonoBehaviour
         {
             Debug.Log("Item Use Failed");
         });
+    }
+
+    public enum Item {
+
     }
 }

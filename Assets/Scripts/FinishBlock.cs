@@ -19,7 +19,7 @@ public class FinishBlock : MonoBehaviourPunCallbacks
             finished = true;
             if(PhotonNetwork.LocalPlayer.ActorNumber == winnerId) {
                 ShowWinScreen();
-                _playerInfo.AddCurrency(PlayerInfo.VirtualCurrency.CO, 5);
+                //_playerInfo.AddCurrency(PlayerInfo.VirtualCurrency.CO, 5);
             } else {
                 //ShowLoseScreen();
                 //_playerInfo.SubtractCurrency(PlayerInfo.VirtualCurrency.HP, 1);

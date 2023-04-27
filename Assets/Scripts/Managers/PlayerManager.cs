@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
-public class PlayerManager : MonoBehaviour
+public class PlayerManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private Transform _spawnLocation;
     private static GameObject localPlayer;
@@ -13,6 +13,12 @@ public class PlayerManager : MonoBehaviour
     void Start()
     {
         player = PhotonNetwork.Instantiate("Player", this.transform.position, Quaternion.identity);
-        GameManager.Instance.AddPlayer(player);
+        int id = player.GetComponent<PhotonView>().ViewID;
+        photonView.RPC(nameof(AddPlayerList), RpcTarget.All, id);
+    }
+
+    [PunRPC] 
+    private void AddPlayerList(int playerID) {
+        GameManager.Instance.AddPlayer(playerID);
     }
 }

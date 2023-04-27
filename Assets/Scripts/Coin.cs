@@ -11,7 +11,8 @@ public class Coin : MonoBehaviourPun
         if (collider.transform.GetComponent(typeof(PlayerInfo)))
         {
             PlayerInfo playerInfo = collider.transform.GetComponent<PlayerInfo>();
-            playerInfo.AddCurrency(PlayerInfo.VirtualCurrency.CO, value);
+            CurrencyManager.Instance.AddCurrency(CurrencyManager.VirtualCurrency.CO, value);
+            PhotonNetwork.Destroy(this.gameObject);
         }
     }
 }

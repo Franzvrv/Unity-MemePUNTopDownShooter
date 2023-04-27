@@ -5,6 +5,7 @@ using Photon.Pun;
 
 public class EnemySpawner : MonoBehaviourPun
 {
+    [SerializeField] private float spawnRate = 3;
     void Start()
     {
         if (PhotonNetwork.LocalPlayer.IsMasterClient) {
@@ -13,7 +14,7 @@ public class EnemySpawner : MonoBehaviourPun
         
     }
 
-    public void Spawn(int id) {
+    [SerializeField] public void Spawn(int id) {
         switch (id) {
             case 1:
                 PhotonNetwork.Instantiate("Prefabs/Enemy1", transform.position, Quaternion.identity);
@@ -30,7 +31,7 @@ public class EnemySpawner : MonoBehaviourPun
     IEnumerator SpawnRoutine() {
         while (true)
         {
-            yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(spawnRate);
             Spawn(Random.Range(1, 3));
         }
     }

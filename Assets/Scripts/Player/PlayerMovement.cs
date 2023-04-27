@@ -14,6 +14,8 @@ public class PlayerMovement : MonoBehaviourPun
     [SerializeField] private List<Color> _playerAssignmentColors;
     //[SerializeField] private TMP_Text _playerName;
 
+    [SerializeField] private bool downed = false;
+
     private SpriteRenderer _spriteRenderer;
 
     private void Awake()
@@ -24,9 +26,9 @@ public class PlayerMovement : MonoBehaviourPun
 
     private void Start()
     {
-        //Color assignment =
-        //_playerAssignmentColors[Mathf.Min(photonView.Controller.ActorNumber - 1, _playerAssignmentColors.Count - 1)];
-        //_spriteRenderer.color = assignment;
+        Color assignment =
+        _playerAssignmentColors[Mathf.Min(photonView.Controller.ActorNumber - 1, _playerAssignmentColors.Count - 1)];
+        _spriteRenderer.color = assignment;
         //_playerName.text = photonView.Controller.NickName;
     }
 

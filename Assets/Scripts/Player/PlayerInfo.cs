@@ -2,46 +2,55 @@ using PlayFab;
 using PlayFab.ClientModels;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
-public class PlayerInfo : MonoBehaviour
+public class PlayerInfo : MonoBehaviourPun, IPunObservable
 {
-
-    public void AddCurrency(VirtualCurrency virtualCurrency, int amountToAdd)
+    [SerializeField] public const int maxHealth = 100;
+    [SerializeField] private int _currentHealth;
+    [SerializeField] private int _currentAmmo;
+    [Header("Prefabs")]
+    [SerializeField] private PlayerUI playerUI;
+    void Awake() {
+        if (photonView.IsMine) {
+            playerUI.gameObject.SetActive(true);
+        }
+        _currentHealth = maxHealth;
+    }
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        PlayFabClientAPI.AddUserVirtualCurrency(new PlayFab.ClientModels.AddUserVirtualCurrencyRequest()
+        if (stream.IsWriting)
         {
-            Amount = amountToAdd,
-            VirtualCurrency = virtualCurrency.ToString()
-        }, OnSuccessfulModifyCurrency, OnFailedModifyCurrency);
-    }
-
-    public void SubtractCurrency(VirtualCurrency virtualCurrency, int amountToAdd)
-    {
-        PlayFabClientAPI.SubtractUserVirtualCurrency(new PlayFab.ClientModels.SubtractUserVirtualCurrencyRequest()
+            stream.SendNext(_currentHealth);
+            stream.SendNext(_currentAmmo);
+        } else
         {
-            Amount = amountToAdd,
-            VirtualCurrency = virtualCurrency.ToString()
-        }, OnSuccessfulModifyCurrency, OnFailedModifyCurrency);
+            _currentHealth = (int)stream.ReceiveNext();
+            _currentAmmo = (int)stream.ReceiveNext();
+        }
     }
 
-    private void OnSuccessfulModifyCurrency(ModifyUserVirtualCurrencyResult result)
+    void Update()
     {
-          switch (result.VirtualCurrency)
+        if (photonView.IsMine)
         {
-            case "HP":
-                Debug.Log($"HP:{result.Balance}");
-                break;
-        }   
+            playerUI.SetHealth(_currentHealth);
+            //playerUI
+        }
     }
 
-    private void OnFailedModifyCurrency(PlayFabError error)
-    {
-        Debug.LogError(error.ToString());
+    public void HealPlayer(int amount) {
+        _currentHealth += amount;
+        if (_currentHealth > maxHealth) {
+            _currentHealth = maxHealth;
+        }
     }
 
-    public enum VirtualCurrency
-    {
-        CO
+    public void DamagePlayer(int amount) {
+        _currentHealth -= amount;
+        if (_currentHealth < 0) {
+            // down the player
+        }
     }
 }
