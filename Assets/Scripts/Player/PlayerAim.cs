@@ -34,6 +34,7 @@ public class PlayerAim : MonoBehaviourPun
             if (Input.GetMouseButtonDown(0))
             {
                 //SoundManager.Playsound("Bang");
+                //Shoot();
                 Shoot();
             }
         }
@@ -59,7 +60,7 @@ public class PlayerAim : MonoBehaviourPun
     }
 
     [PunRPC]
-    void Shoot()
+    private void Shoot()
     {
         GameObject bullet = PhotonNetwork.Instantiate("Prefabs/Bullet", firePoint.position, firePoint.rotation);
         Rigidbody rb = bullet.GetComponent<Rigidbody>();

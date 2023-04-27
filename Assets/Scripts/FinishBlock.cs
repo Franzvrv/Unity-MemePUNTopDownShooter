@@ -11,9 +11,6 @@ public class FinishBlock : MonoBehaviourPunCallbacks
 
     [SerializeField] PlayerInfo _playerInfo;
 
-    void Awake() {
-        //endScreen = Resources.Load("Endscreen");
-    }
     private void OnTriggerEnter2D(Collider2D collider) {
         if(!finished && collider.GetComponent<PlayerMovement>()) {
 
@@ -24,8 +21,8 @@ public class FinishBlock : MonoBehaviourPunCallbacks
                 ShowWinScreen();
                 _playerInfo.AddCurrency(PlayerInfo.VirtualCurrency.CO, 5);
             } else {
-                ShowLoseScreen();
-                _playerInfo.SubtractCurrency(PlayerInfo.VirtualCurrency.HP, 1);
+                //ShowLoseScreen();
+                //_playerInfo.SubtractCurrency(PlayerInfo.VirtualCurrency.HP, 1);
             }
         }
     }
@@ -35,9 +32,15 @@ public class FinishBlock : MonoBehaviourPunCallbacks
         _endScreen.GetComponent<EndScreen>().Initialize(null);
     }
 
-    [PunRPC] 
-    void ShowLoseScreen() {
-        _endScreen = Instantiate(Resources.Load("Endscreen", typeof(GameObject))) as GameObject;
-        _endScreen.GetComponent<EndScreen>().Initialize(PhotonNetwork.CurrentRoom.GetPlayer(winnerId).NickName);
-    }
+    // [PunRPC]
+    // private void LoseCondition()
+    // {
+    //     PlayFabClientAPI.UpdatePlayerStatistics( new UpdatePlayerStatisticsRequest()
+    //     {
+    //         Statistics  = { new StatisticUpdate() {StatisticName = "Failures", Value = 1, Version = 0}}
+    //     }, (updateSuccess) =>
+    //     {
+                    
+    //     }, (updateFailure) => { });      
+    // }
 }

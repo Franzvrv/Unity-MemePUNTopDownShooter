@@ -17,14 +17,13 @@ public class Bullet : MonoBehaviourPunCallbacks
         lifetime -= Time.deltaTime;
         if (lifetime <= 0)
         {
-            Destroy(this.gameObject);
+            photonView.RPC(nameof(DestroyThis), RpcTarget.All);
         }
     }
     
 
     private void OnTriggerEnter(Collider collider)
     {
-        Destroy(this.gameObject);
         GameObject Player = gameObject.GetComponent<GameObject>();
 
         if (collider.transform.GetComponent(typeof(Enemy)))
@@ -32,5 +31,12 @@ public class Bullet : MonoBehaviourPunCallbacks
             Enemy enemy = collider.transform.GetComponent<Enemy>();
             enemy.DamageEnemy(10);
         }
+
+        photonView.RPC(nameof(DestroyThis), RpcTarget.All);
+    }
+
+    [PunRPC]
+    private void DestroyThis() {
+        Destroy(this.gameObject);
     }
 }

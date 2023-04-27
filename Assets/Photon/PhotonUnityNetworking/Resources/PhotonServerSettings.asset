@@ -42,6 +42,9 @@ MonoBehaviour:
   - MessageTest
   - ShowLoseScreen
   - Shoot
+  - DamageEnemy
+  - DestroyThis
+  - DamageEnemyPun
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

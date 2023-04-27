@@ -7,7 +7,6 @@ using UnityEngine;
 
 public class CurrencyManager : MonoBehaviour
 {
-    private int _hpAmount;
     private int _coAmount;
     
     public void Init(string currencyCode, int balance) 
@@ -16,9 +15,6 @@ public class CurrencyManager : MonoBehaviour
         {
             case "CO":
                 _coAmount = balance;
-                break;
-            case "HP":
-                _hpAmount = balance;
                 break;
         }
 
@@ -50,10 +46,6 @@ public class CurrencyManager : MonoBehaviour
                     _coAmount = result.Balance;
                     Debug.Log($"CO:{_coAmount}");
                 break;
-            case "HP":
-                _hpAmount = result.Balance;
-                Debug.Log($"HP:{_hpAmount}");
-                break;
         }   
     }
 
@@ -64,14 +56,6 @@ public class CurrencyManager : MonoBehaviour
 
     public enum VirtualCurrency
     {
-        HP,
         CO
-    }
-
-    [ContextMenu("Test Add and Subtract")]
-    private void TestSubtract()
-    {
-        AddCurrency(VirtualCurrency.CO, 1000);
-        SubtractCurrency(VirtualCurrency.HP, 1);
     }
 }

@@ -29,9 +29,6 @@ public class PlayerInfo : MonoBehaviour
     {
           switch (result.VirtualCurrency)
         {
-                case "CO":
-                    Debug.Log($"CO:{result.Balance}");
-                break;
             case "HP":
                 Debug.Log($"HP:{result.Balance}");
                 break;
@@ -45,7 +42,6 @@ public class PlayerInfo : MonoBehaviour
 
     public enum VirtualCurrency
     {
-        HP,
         CO
     }
 }
