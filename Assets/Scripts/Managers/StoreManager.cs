@@ -8,11 +8,25 @@ using UnityEngine;
 
 public class StoreManager : MonoBehaviour
 {
+    public static StoreManager Instance;
     private List<CatalogItem> _catalog = new List<CatalogItem>();
 
     public event Action PurchaseSuccessfulEvent;
 
-    private const string catalogversion = "Test";
+    private const string catalogversion = "1";
+
+    public void Awake() {
+        if(!Instance) {
+            Instance = this;
+            Init();
+            return;
+        }
+
+        if (Instance && Instance != this) {
+            Destroy(gameObject);
+            return;
+        }
+    }
 
     public void Init()
     {
@@ -59,6 +73,8 @@ public class StoreManager : MonoBehaviour
             return;
         }
 
+        //PlayfabClientAPI.PurchaseItemRequest
+
         var currencyToUse = currency.ToString();
         PlayFabClientAPI.PurchaseItem(new PurchaseItemRequest()
         {
@@ -76,5 +92,16 @@ public class StoreManager : MonoBehaviour
         {
             Debug.Log("Purchase Failed");
         });
+    }
+
+    public void PurchaseAmmo() {
+        PurchaseItem("AM", CurrencyManager.VirtualCurrency.CO);
+    }
+    public void Purchase100Ammo() {
+        PurchaseItem("AM100", CurrencyManager.VirtualCurrency.CO);
+    }
+
+    public void PurchaseMedkit() {
+        PurchaseItem("MK", CurrencyManager.VirtualCurrency.CO);
     }
 }

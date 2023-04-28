@@ -27,24 +27,26 @@ public class InventoryManager : MonoBehaviour
     {
         _currentInventory = items;
     }
-    
-    public void UseItem(string itemId, Action successCallback)
+
+    public void UseItem(Item itemId, int itemCount, Action successCallback)
     {
-        var itemToUse = _currentInventory.Find(s => s.ItemId == itemId);
+        var itemToUse = _currentInventory.Find(s => s.ItemId == itemId.ToString());
         
         if (itemToUse == null)
         {
             Debug.LogError($"Item: {itemId} not found");
             return;
         }
+
+
         
         PlayFabClientAPI.ConsumeItem(new ConsumeItemRequest()
         {
             ItemInstanceId = itemToUse.ItemInstanceId,
-            ConsumeCount = 1
+            ConsumeCount = itemCount
         }, (success) =>
         {   
-            
+            Debug.Log("Item successfully used");
             successCallback?.Invoke();
             for( var i = 0; i < _currentInventory.Count; i++)
             {
@@ -61,6 +63,7 @@ public class InventoryManager : MonoBehaviour
     }
 
     public enum Item {
-
+        AM,
+        MK
     }
 }

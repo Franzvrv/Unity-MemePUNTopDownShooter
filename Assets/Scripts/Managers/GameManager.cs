@@ -28,10 +28,10 @@ public class GameManager : MonoBehaviourPun, IPunObservable
     {
         if (stream.IsWriting)
         {
-            stream.SendNext(playerIDs);
+            //stream.SendNext(playerIDs);
         } else
         {
-            playerIDs = (List<int>)stream.ReceiveNext();
+            //playerIDs = (List<int>)stream.ReceiveNext();
         }
     }
 }

@@ -10,11 +10,19 @@ public class PlayerUI : MonoBehaviourPun
     public static PlayerUI Instance;
     [SerializeField] private TMP_Text ammoText;
     [SerializeField] private TMP_Text splashText;
+    [SerializeField] private TMP_Text coinText;
+    [SerializeField] private TMP_Text medkitText;
     [SerializeField] private Slider healthSlider;
 
     void Awake() {
-        if (photonView.IsMine) {
+        if (!Instance) {
             Instance = this;
+            return;
+        }
+
+        if (Instance && Instance != this) {
+            Destroy(gameObject);
+            return;
         }
     }
 
@@ -24,10 +32,14 @@ public class PlayerUI : MonoBehaviourPun
     }
 
     public void SetHealth(int health) {
-        healthSlider.value = (health / PlayerInfo.maxHealth) / 100;
+        healthSlider.value = health * 100 / PlayerInfo.maxHealth;
     }
 
-    public void SetSplashText(string text) {
+    public void SetCoinText(string text) {
+        coinText.text = text;
+    }
 
+    public void SetMedkitText(string text) {
+        medkitText.text = text;
     }
 }

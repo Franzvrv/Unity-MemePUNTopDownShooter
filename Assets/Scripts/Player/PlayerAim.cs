@@ -8,14 +8,16 @@ public class PlayerAim : MonoBehaviourPun
     [Header("Gun Mechanics")]
     [SerializeField] float bulletForce = 10f;
     [SerializeField] int magazineCapacity;
-    [SerializeField] int maxMagazineCapacity;
+    [SerializeField] public const int maxMagazineCapacity = 20;
     [SerializeField] int ammoCapacity;
     [Header("Essentials")]
     [SerializeField] private Transform playerTransform;
     [SerializeField] private Transform firePoint;
     [SerializeField] private GameObject _cameraPrefab, _playerUIPrefab;
     [SerializeField] private LayerMask aimMask;
-    private PlayerUI playerUI;
+    [SerializeField] private PhotonView playerPhotonView;
+    [SerializeField] private PlayerMovement playerMovement;
+    public PlayerUI playerUI;
     private Rigidbody rb;
     public Camera mainCamera;
 
@@ -64,12 +66,18 @@ public class PlayerAim : MonoBehaviourPun
         }
     }
 
+    private void Reload() {
+        
+    }
+
     [PunRPC]
     private void Shoot()
     {
         ammoCapacity -= 1;
         GameObject bullet = PhotonNetwork.Instantiate("Prefabs/Bullet", firePoint.position, firePoint.rotation);
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
+        bullet.GetComponent<Bullet>().Init(playerPhotonView.ViewID);
         rb.AddForce(firePoint.forward * bulletForce, ForceMode.Impulse);
+        
     }
 }

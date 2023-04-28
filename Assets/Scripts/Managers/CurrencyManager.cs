@@ -24,7 +24,7 @@ public class CurrencyManager : MonoBehaviour
         }
     }
 
-    void Start() {
+    void OnEnable() {
         CheckBalance();
     }
 
@@ -36,11 +36,8 @@ public class CurrencyManager : MonoBehaviour
             {
                 Init(keyValuePair.Key, keyValuePair.Value);
             }
-
             CheckBalanceSuccessEvent?.Invoke();
-            
             InventoryManager.Instance.UpdateInventory(success.Inventory);
-            
         }, (failure) =>
         {
             

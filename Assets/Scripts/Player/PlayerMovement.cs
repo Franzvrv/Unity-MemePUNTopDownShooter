@@ -15,6 +15,8 @@ public class PlayerMovement : MonoBehaviourPun
     //[SerializeField] private TMP_Text _playerName;
 
     [SerializeField] private bool downed = false;
+    [SerializeField] private PlayerInfo playerInfo;
+    [SerializeField] private PlayerInfo playerVicinity;
 
     private SpriteRenderer _spriteRenderer;
 
@@ -34,26 +36,38 @@ public class PlayerMovement : MonoBehaviourPun
 
     private void Update()
     {
-        if (!photonView.IsMine) return;
+        if (!photonView.IsMine ||  downed) return;
         
         //Gravity();
+
         var horizontal = Input.GetAxisRaw("Horizontal");
         var vertical = Input.GetAxisRaw("Vertical");
-        //if (horInput == 0) return;
-        //var transform1 = this.transform;
-        //var position = transform1.position;
-        //transform1.position = new Vector3(position.x + speedMath, position.y, position.z);
 
-        if (Input.GetKeyUp(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             Debug.Log("I'm pressing space");
             photonView.RPC(nameof(MessageTest), RpcTarget.All, photonView.Controller.NickName);
         }
+        if (Input.GetKeyDown(KeyCode.E)) {
+            if (playerVicinity != null) {
+                if (playerVicinity.Down == true) {
+                    playerVicinity.GetUp();
+                }
+            }
+        }
         transform.position += new Vector3(horizontal * _moveSpeed * Time.deltaTime, 0, vertical * _moveSpeed * Time.deltaTime);
     }
 
-    public void Respawn() {
-        gameObject.transform.position = new Vector3(-6.55f, -1.25f, 0);
+    private void onTriggerEnter(Collider collider) {
+        if (collider.GetComponent<PlayerInfo>()) {
+            playerVicinity = collider.GetComponent<PlayerInfo>();
+        }
+    }
+
+    private void onTriggerExit(Collider collider) {
+        if (collider.GetComponent<PlayerInfo>()) {
+            playerVicinity = null;
+        }
     }
 
     [PunRPC]
@@ -61,4 +75,18 @@ public class PlayerMovement : MonoBehaviourPun
     {
         Debug.Log($"{playerName}:Are you ok?");
     }
+
+    private void GetPlayerUp() {
+
+    }
+
+    private void UnGetPlayerUp() {
+
+    }
+
+
+
+
+
+
 }

@@ -1,3 +1,4 @@
+//using System
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,7 @@ public class Enemy : MonoBehaviourPunCallbacks
     [SerializeField] private int health = 100;
     [SerializeField] private float walkSpeed = 5;
     [SerializeField] private int targetPlayerID = 0;
+    [SerializeField] private int attack = 5;
     private NavMeshAgent agent;
     private LayerMask ground, isPlayer;
     private Vector3 walkPoint;
@@ -52,16 +54,26 @@ public class Enemy : MonoBehaviourPunCallbacks
         }
     }
 
-    public void DamageEnemy(int damage) {
-        photonView.RPC(nameof(DamageEnemyPun), RpcTarget.All, damage);
+    public void DamageEnemy(int damage, int playerID) {
+        photonView.RPC(nameof(DamageEnemyPun), RpcTarget.All, damage, playerID);
+    }
+
+    void OnCollisionEnter(Collision collision) {
+        if (collision.transform.GetComponent(typeof(PlayerInfo)))
+        {
+            PlayerInfo player = collision.transform.GetComponent<PlayerInfo>();
+            player.DamagePlayer(attack);
+        }
     }
 
     [PunRPC]
-    public void DamageEnemyPun(int damage)
+    public void DamageEnemyPun(int damage, int playerID)
     {
         health -= damage;
         if (health <= 0)
         {
+            PhotonView.Find(playerID).gameObject.GetComponent<PlayerInfo>().IncreaseKills();
+            PhotonNetwork.Instantiate("Prefabs/Coin", transform.position, Quaternion.identity);
             PhotonNetwork.Destroy(this.gameObject);
         }
     }

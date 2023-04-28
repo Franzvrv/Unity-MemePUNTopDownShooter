@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using PlayFab;
 using Photon.Pun;
 using UnityEngine;
+using PlayFab.ClientModels;
 
 public class FinishBlock : MonoBehaviourPunCallbacks
 {
@@ -11,19 +13,19 @@ public class FinishBlock : MonoBehaviourPunCallbacks
 
     [SerializeField] PlayerInfo _playerInfo;
 
-    private void OnTriggerEnter2D(Collider2D collider) {
-        if(!finished && collider.GetComponent<PlayerMovement>()) {
-
-            //winnerId = collider.GetComponent<PlayerMovement>().photonView.ControllerActorNr;
+    private void OnTriggerEnter(Collider collider) {
+        if(!finished && collider.GetComponent<PhotonView>()) {
+            PhotonView _photonView = collider.GetComponent<PhotonView>();
 
             finished = true;
-            if(PhotonNetwork.LocalPlayer.ActorNumber == winnerId) {
-                ShowWinScreen();
-                //_playerInfo.AddCurrency(PlayerInfo.VirtualCurrency.CO, 5);
-            } else {
-                //ShowLoseScreen();
-                //_playerInfo.SubtractCurrency(PlayerInfo.VirtualCurrency.HP, 1);
-            }
+            // if(PhotonNetwork.LocalPlayer.ActorNumber == winnerId) {
+            //     ShowWinScreen();
+            //     _playerInfo.AddCurrency(PlayerInfo.VirtualCurrency.CO, 5);
+            // } else {
+            //     ShowLoseScreen();
+            //     _playerInfo.SubtractCurrency(PlayerInfo.VirtualCurrency.HP, 1);
+            // }
+            _photonView.RPC(nameof(WinCondition), RpcTarget.All);
         }
     }
 
@@ -32,15 +34,17 @@ public class FinishBlock : MonoBehaviourPunCallbacks
         _endScreen.GetComponent<EndScreen>().Initialize(null);
     }
 
-    // [PunRPC]
-    // private void LoseCondition()
-    // {
-    //     PlayFabClientAPI.UpdatePlayerStatistics( new UpdatePlayerStatisticsRequest()
-    //     {
-    //         Statistics  = { new StatisticUpdate() {StatisticName = "Failures", Value = 1, Version = 0}}
-    //     }, (updateSuccess) =>
-    //     {
-                    
-    //     }, (updateFailure) => { });      
-    // }
+    [PunRPC]
+    private void WinCondition()
+    {
+        PlayFabClientAPI.UpdatePlayerStatistics( new UpdatePlayerStatisticsRequest()
+        {
+            Statistics  = { new StatisticUpdate() {StatisticName = "Wins", Value = 1, Version = 1}}
+        }, (updateSuccess) =>
+        {
+            Debug.Log("Player Won");
+        }, (updateFailure) => { 
+            Debug.Log("Statistic Update failed");
+        });      
+    }
 }

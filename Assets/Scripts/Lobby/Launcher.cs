@@ -294,7 +294,6 @@ using PlayFab;
 				_roomStatistics.text += $"\n #{player.Key} | {player.Value.NickName}";
 				GameObject playerUI = Instantiate(_playerUIPrefab, transform.position, Quaternion.identity);
 				playerUI.transform.SetParent(playerLobbyInstance.transform, false);
-				print(PhotonNetwork.LocalPlayer.IsMasterClient + " - " + player.Key);
 				PlayerLobbyUI _playerLobbyUI = playerUI.GetComponent<PlayerLobbyUI>();
 				_playerLobbyUI.Initialize(player.Value.NickName, player.Value.ActorNumber.ToString(), player.Value.UserId, player.Value.IsMasterClient, PhotonNetwork.LocalPlayer.IsMasterClient);
 				

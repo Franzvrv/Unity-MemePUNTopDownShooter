@@ -1583,8 +1583,10 @@ namespace Photon.Pun
 
             public void Add(List<object> viewData)
             {
+                Debug.Log(this.ObjectUpdates.Count + " - " + this.ObjectUpdates.Capacity);
                 if (this.ObjectUpdates.Count >= this.ObjectUpdates.Capacity)
                 {
+                    
                     // NOTE: we could also trim to new size
                     throw new Exception("Can't add. Size exceeded.");
                 }

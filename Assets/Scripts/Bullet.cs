@@ -6,10 +6,15 @@ using Photon.Pun;
 public class Bullet : MonoBehaviourPunCallbacks
 {
     [SerializeField] private float lifetime = 2;
+    [SerializeField] private int _playerID;
 
     private void Start()
     {
         transform.position = new Vector3(transform.position.x, 0.5f, transform.position.z);
+    }
+
+    public void Init(int playerID) {
+        _playerID = playerID;
     }
 
     private void Update()
@@ -29,7 +34,7 @@ public class Bullet : MonoBehaviourPunCallbacks
         if (collider.transform.GetComponent(typeof(Enemy)))
         {
             Enemy enemy = collider.transform.GetComponent<Enemy>();
-            enemy.DamageEnemy(10);
+            enemy.DamageEnemy(10, _playerID);
         }
 
         photonView.RPC(nameof(DestroyThis), RpcTarget.All);
