@@ -13,6 +13,7 @@ public class PlayerUI : MonoBehaviourPun
     [SerializeField] private TMP_Text coinText;
     [SerializeField] private TMP_Text medkitText;
     [SerializeField] private Slider healthSlider;
+    [SerializeField] private EndScreen endScreen;
 
     void Awake() {
         if (!Instance) {
@@ -41,5 +42,10 @@ public class PlayerUI : MonoBehaviourPun
 
     public void SetMedkitText(string text) {
         medkitText.text = text;
+    }
+
+    public void InitEndScreen(bool win, int kills, int time) {
+        endScreen.gameObject.SetActive(true);
+        endScreen.Initialize(win, kills, time);
     }
 }

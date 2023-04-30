@@ -120,7 +120,6 @@ public class AuthenticationManager : MonoBehaviour
             foreach (var item in payload.UserVirtualCurrency)
             {
                 _currencyManager.Init(item.Key, item.Value);
-                Debug.Log($"{item.Key}: {item.Value}");
             }
         } else {
             Debug.Log("No virtual currency");

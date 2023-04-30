@@ -79,7 +79,6 @@ public class CurrencyManager : MonoBehaviour
         {
                 case "CO":
                     _coAmount = result.Balance;
-                    Debug.Log($"CO:{_coAmount}");
                 break;
         }   
     }

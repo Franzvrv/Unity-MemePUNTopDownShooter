@@ -52,8 +52,6 @@ public class StoreManager : MonoBehaviour
                     {
                         currencyValues = item.VirtualCurrencyPrices.Aggregate(currencyValues, (current, keyValuePair) => current + $"\nCurrency:{keyValuePair.Key} Price:{keyValuePair.Value}");
                     }
-
-                    Debug.Log($"Name:{item.DisplayName} \nDescription:{item.Description} {currencyValues}");
                 }
             }
 

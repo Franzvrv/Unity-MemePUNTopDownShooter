@@ -188,6 +188,7 @@ MonoBehaviour:
   _kills: 0
   _isDown: 0
   _invincible: 0
+  _gameFinished: 0
   gettingUp: 0
   getUpTime: 5
   playerUI: {fileID: 0}
@@ -282,7 +283,6 @@ MonoBehaviour:
   magazineCapacity: 20
   ammoCapacity: 9999
   reloading: 0
-  reloadTimeLeft: 0
   playerTransform: {fileID: 3086555336521371885}
   firePoint: {fileID: 3086555336037950201}
   _cameraPrefab: {fileID: 7912000470374054472, guid: 1599a0db788fef245880001b9b5afc43, type: 3}

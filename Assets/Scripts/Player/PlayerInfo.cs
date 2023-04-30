@@ -16,6 +16,7 @@ public class PlayerInfo : MonoBehaviourPun, IPunObservable
     [SerializeField] private int _kills = 0;
     [SerializeField] private bool _isDown = false;
     [SerializeField] private bool _invincible = false;
+    [SerializeField] private bool _gameFinished = false;
     public bool gettingUp = false;
     [SerializeField] private float getUpTime = 5f; 
     [SerializeField] private PlayerUI playerUI = null;
@@ -57,14 +58,14 @@ public class PlayerInfo : MonoBehaviourPun, IPunObservable
         if (photonView.IsMine)
         {
             playerUI.SetHealth(_currentHealth);
-            if (Input.GetKeyDown(KeyCode.Q) && _currentHealth < maxHealth) {
+            if (Input.GetKeyDown(KeyCode.Q) && _currentHealth < maxHealth && !_isDown) {
                 InventoryManager.Instance.UseItem(InventoryManager.Item.MK, 1, () => {
                     HealPlayer(60);
                     ResetInventory();
                 });
             }
             if (Input.GetKeyDown(KeyCode.E)) {
-                FinishGame();
+                
             }
         }
 
@@ -94,6 +95,7 @@ public class PlayerInfo : MonoBehaviourPun, IPunObservable
             photonView.RPC(nameof(DamagePlayerPun), RpcTarget.All);
             if (_currentHealth <= 0) {
                 DownPlayer();
+                LoseGame();
             }
         }
     }
@@ -198,45 +200,68 @@ public class PlayerInfo : MonoBehaviourPun, IPunObservable
         EnemySpawner.Instance.ReduceEnemyCount();
     }
 
-    public void FinishGame() {
+    public void LoseGame() {
+        if (_gameFinished) return;
+        var request = new GetPlayerStatisticsRequest();
+        PlayFabClientAPI.GetPlayerStatistics(
+            request, (result) => {
+                int Wins = 0, initialKills = 0, initialTime = 0;
+                if (result != null)
+                {
+                    foreach (var statistic in result.Statistics)
+                    {
+                        switch(statistic.StatisticName) {
+                            case "Wins":
+                                Wins = statistic.Value;
+                            break;
+                            case "Kills":
+                                initialKills = statistic.Value;
+                            break;
+                            case "Time":
+                                initialTime = statistic.Value;
+                            break;
+                            default:
+                                Debug.Log("Unknown statistic " + statistic.StatisticName);
+                            break;
+                        }
+                    }
+                    FinishGame(initialTime, initialKills, Wins, false);
+                } else {
+                    Debug.Log("No player statistics found");
+                }
+            }, (fail) => {
+                Debug.LogError("Error getting user data: " + fail.ErrorMessage);
+            }
+        );
+    }
+
+    //Finish Game Methods
+    public void FinishGame(int initialTime, int initialKills, int newWins, bool win) {
+        if (_gameFinished) return;
+        _gameFinished = true;
+        playerUI.InitEndScreen(win, _kills, _timeSurvived);
         PlayFabClientAPI.UpdatePlayerStatistics( new UpdatePlayerStatisticsRequest()
         {
             Statistics  = new List<StatisticUpdate>
             { new StatisticUpdate() 
                 {
                     StatisticName = "Time", 
-                    Value = _timeSurvived
+                    Value = initialTime + _timeSurvived
                 },
                 new StatisticUpdate() {
                     StatisticName = "Kills", 
-                    Value = _kills
-                }
-            }
-        }, (updateSuccess) =>
-        {
-            Debug.Log("Wins Statistic Update Success");
-        }, (updateFailure) => { 
-            Debug.Log("Wins Statistic Update failed");
-        }); 
-    }
-
-    private void WinCondition()
-    {
-        PlayFabClientAPI.UpdatePlayerStatistics( new UpdatePlayerStatisticsRequest()
-        {
-            Statistics  = new List<StatisticUpdate>
-            { new StatisticUpdate() 
-                {
+                    Value = initialKills + _kills
+                },
+                new StatisticUpdate() {
                     StatisticName = "Wins", 
-                    Value = 1
+                    Value = newWins
                 }
             }
         }, (updateSuccess) =>
         {
-            Debug.Log("Wins Statistic Update Success");
+            Debug.Log("Statistic Update Success");
         }, (updateFailure) => { 
-            Debug.Log("Wins Statistic Update Failed");
-        });   
+            Debug.Log("Statistic Update failed");
+        });
     }
-
 }

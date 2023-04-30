@@ -36,18 +36,13 @@ public class PlayerMovement : MonoBehaviourPun
 
     private void Update()
     {
-        if (!photonView.IsMine ||  downed) return;
+        if (!photonView.IsMine || playerInfo.IsDown) return;
         
         //Gravity();
 
         var horizontal = Input.GetAxisRaw("Horizontal");
         var vertical = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Debug.Log("I'm pressing space");
-            photonView.RPC(nameof(MessageTest), RpcTarget.All, photonView.Controller.NickName);
-        }
         if (Input.GetKeyDown(KeyCode.E)) {
             if (playerVicinity != null) {
                 if (playerVicinity.IsDown == true) {

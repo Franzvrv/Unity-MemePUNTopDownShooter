@@ -5,12 +5,16 @@ using TMPro;
 
 public class EndScreen : MonoBehaviour
 {
-    [SerializeField] TMP_Text text;
-    public void Initialize(string winnerName) {
-        if (winnerName == null) {
-            text.text = "Winner Winner Chicken Adobo";
+    [SerializeField] TMP_Text _text;
+    [SerializeField] TMP_Text _kills;
+    [SerializeField] TMP_Text _time;
+    public void Initialize(bool winner, int kills, int time) {
+        if (winner) {
+            _text.text = "Winner Winner Chicken Adobo";
         } else {
-            text.text = "You Lose " + winnerName + " Won";
+            _text.text = "Better Call Luck Next Time";
         }
+        _kills.text = "You Killed " + kills + " Enemies";
+        _time.text = "And Survived For " + time + " Seconds";
     }
 }

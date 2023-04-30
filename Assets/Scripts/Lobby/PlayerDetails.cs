@@ -58,8 +58,6 @@ public class PlayerDetails : MonoBehaviour
 
         foreach (var item in result.InfoResultPayload.UserVirtualCurrency)
         {
-            //_currencyManager.Init(item.Key, item.Value);
-            Debug.Log($"{item.Key}: {item.Value}");
             switch(item.Key) {
                 case "CO":
                     _coinText.text = item.Value.ToString();

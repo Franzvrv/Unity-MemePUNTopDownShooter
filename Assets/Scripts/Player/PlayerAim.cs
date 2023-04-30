@@ -11,8 +11,7 @@ public class PlayerAim : MonoBehaviourPun
     [SerializeField] public const int maxMagazineCapacity = 20;
     [SerializeField] private int ammoCapacity;
     [SerializeField] private bool reloading = false;
-    [SerializeField] private float reloadTimeLeft;
-    [SerializeField] public const float reloadTime = 5f;
+    public const float reloadTime = 1.5f;
 
     [Header("Essentials")]
     [SerializeField] private Transform playerTransform;
@@ -78,21 +77,22 @@ public class PlayerAim : MonoBehaviourPun
     }
 
     IEnumerator reloadCoroutine() {
-        Debug.Log("Reloading");
+        float reloadTimeLeft = reloadTime;
         reloading = true;
         while (reloading) {
             yield return new WaitForSeconds(1);
             reloadTimeLeft--;
             if (reloadTimeLeft <= 0) {
-                reloading = false;
                 InventoryManager.Instance.UseItem(InventoryManager.Item.AM, 1, () => {
+                    reloading = false;
                     magazineCapacity = maxMagazineCapacity;
                     playerInfo.ResetInventory();
                     reloading = false;
                 });
+                reloading = false;
+                yield break;
             }
         }
-        Debug.Log("Reload Done");
         yield break;
     }
 
