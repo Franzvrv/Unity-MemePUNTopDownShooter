@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d0199c11aa6f514784c5c69cd8378d8, type: 3}
   m_Name: PlayFabEditorPrefsSO
   m_EditorClassIdentifier: 
-  DevAccountEmail: leynard.melad@ciit.edu.ph
-  DevAccountToken: onuo4w9fesxjbu4pmk1q3f17ruh35nii9jqqyu7btfrkykq7xptmww3x956e6c8ikunsthxtix914sywr8ek4ttout84wwwxeha51rz4ggja61ismfeymn3sg91j8wkhsqx3xqyd61q1djhbbhmo1bmos7wwxkb7ztswiwdncywbi66br6ijc4pjy7ejpd3jtp3w5pfe
+  DevAccountEmail: franz.virgino@ciit.edu.ph
+  DevAccountToken: qfdkhmmef39r8tsjjo1xj4soxnww97xb8hx33o78mrj8hc3io8qsbk8ddtd7i5ph4xpcmko1o61bjbk3b6oy4f8d9py74babe34mm5r9dpq39if1mu5jbd3t93y8ezx9dz8jn8ozme5bgmy8465dnhn3hd3hpx9yj8tf33xwe4pouf9hnybrbim5mbgqjt7bzapjwgzg
   AadAuthorization: 
-  SelectedStudio: 
+  SelectedStudio: EMC209
   SdkPath: Assets/PlayFabSDK
   EdExPath: 
   LocalCloudScriptPath: 
-  PanelIsShown: 1
-  curMainMenuIdx: 0
+  PanelIsShown: 0
+  curMainMenuIdx: 1
   curSubMenuIdx: 0

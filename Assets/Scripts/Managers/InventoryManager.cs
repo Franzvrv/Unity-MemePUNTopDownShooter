@@ -28,7 +28,7 @@ public class InventoryManager : MonoBehaviour
         _currentInventory = items;
     }
 
-    public void UseItem(Item itemId, int itemCount, Action successCallback)
+    public void UseItem(Item itemId, int consumeCount, Action successCallback)
     {
         var itemToUse = _currentInventory.Find(s => s.ItemId == itemId.ToString());
         
@@ -37,13 +37,11 @@ public class InventoryManager : MonoBehaviour
             Debug.LogError($"Item: {itemId} not found");
             return;
         }
-
-
         
         PlayFabClientAPI.ConsumeItem(new ConsumeItemRequest()
         {
             ItemInstanceId = itemToUse.ItemInstanceId,
-            ConsumeCount = itemCount
+            ConsumeCount = 1
         }, (success) =>
         {   
             Debug.Log("Item successfully used");

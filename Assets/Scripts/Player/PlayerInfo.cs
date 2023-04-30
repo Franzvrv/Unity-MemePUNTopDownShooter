@@ -14,14 +14,14 @@ public class PlayerInfo : MonoBehaviourPun, IPunObservable
     [SerializeField] private int _currentAmmo;
     [SerializeField] private int _timeSurvived = 0;
     [SerializeField] private int _kills = 0;
-    [SerializeField] private bool _down = false;
+    [SerializeField] private bool _isDown = false;
     [SerializeField] private bool _invincible = false;
     public bool gettingUp = false;
     [SerializeField] private float getUpTime = 5f; 
     [SerializeField] private PlayerUI playerUI = null;
     [SerializeField] private PlayerAim playerAim;
 
-    public bool Down { get => _down; }
+    public bool IsDown { get => _isDown; }
 
     void Awake() {
         _currentHealth = maxHealth;
@@ -42,13 +42,13 @@ public class PlayerInfo : MonoBehaviourPun, IPunObservable
             stream.SendNext(_currentHealth);
             stream.SendNext(_currentAmmo);
             stream.SendNext(_invincible);
-            stream.SendNext(_down);
+            stream.SendNext(_isDown);
         } else
         {
             _currentHealth = (int)stream.ReceiveNext();
             _currentAmmo = (int)stream.ReceiveNext();
             _invincible = (bool)stream.ReceiveNext();
-            _down = (bool)stream.ReceiveNext();
+            _isDown = (bool)stream.ReceiveNext();
         }
     }
 
@@ -57,10 +57,10 @@ public class PlayerInfo : MonoBehaviourPun, IPunObservable
         if (photonView.IsMine)
         {
             playerUI.SetHealth(_currentHealth);
-            if (Input.GetKeyDown(KeyCode.Q)) {
+            if (Input.GetKeyDown(KeyCode.Q) && _currentHealth < maxHealth) {
                 InventoryManager.Instance.UseItem(InventoryManager.Item.MK, 1, () => {
                     HealPlayer(60);
-                    ResetStatistics();
+                    ResetInventory();
                 });
             }
             if (Input.GetKeyDown(KeyCode.E)) {
@@ -99,7 +99,7 @@ public class PlayerInfo : MonoBehaviourPun, IPunObservable
     }
 
     public void GetUp() {
-        _down = false;
+        _isDown = false;
     }
 
     public void IncreaseKills() {
@@ -123,15 +123,55 @@ public class PlayerInfo : MonoBehaviourPun, IPunObservable
         _invincible = false;
     }
 
-    public void DownPlayer() {
-        _down = true;
+    public void CollectCoin(int amount) {
+        CurrencyManager.Instance.AddCurrency(CurrencyManager.VirtualCurrency.CO, amount);
+        ResetCurrency();
     }
 
+    public void DownPlayer() {
+        _isDown = true;
+    }
+
+
+
     public void ResetStatistics() {
+        ResetInventory();
+        ResetCurrency();
+    }
+
+    public void ResetInventory() {
+        var request = new GetPlayerCombinedInfoRequest();
+        request.InfoRequestParameters = new GetPlayerCombinedInfoRequestParams();
+        request.InfoRequestParameters.GetUserInventory = true;
+        PlayFabClientAPI.GetPlayerCombinedInfo(
+            request, (result) => {
+                if (result.InfoResultPayload.UserInventory != null)
+                {
+                    foreach (var item in result.InfoResultPayload.UserInventory)
+                    {
+                        switch(item.ItemId) {
+                            case "MK":
+                                playerUI.SetMedkitText(item.RemainingUses.ToString());
+                                break;
+                            case "AM":
+                                playerUI.SetAmmo(playerAim.MagazineCapacity, (int)item.RemainingUses);
+                                playerAim.AmmoCapacity = (int)item.RemainingUses;
+                            break;
+                        }
+                    }
+                } else {
+                    Debug.Log("No player inventory found");
+                }
+            }, (fail) => {
+                Debug.Log("No Player Info found");
+            }
+        );
+    }
+
+    public void ResetCurrency() {
         var request = new GetPlayerCombinedInfoRequest();
         request.InfoRequestParameters = new GetPlayerCombinedInfoRequestParams();
         request.InfoRequestParameters.GetUserVirtualCurrency = true;
-        request.InfoRequestParameters.GetUserInventory = true;
         PlayFabClientAPI.GetPlayerCombinedInfo(
             request, (result) => {
                 foreach (var item in result.InfoResultPayload.UserVirtualCurrency)
@@ -142,22 +182,8 @@ public class PlayerInfo : MonoBehaviourPun, IPunObservable
                         break;
                     }
                 }
-
-                if (result.InfoResultPayload.UserInventory != null)
-                {
-                    foreach (var item in result.InfoResultPayload.UserInventory)
-                    {
-                        switch(item.ItemId) {
-                            case "MK":
-                                playerUI.SetMedkitText(item.RemainingUses.ToString());
-                            break;
-                        }
-                    }
-                } else {
-                    Debug.Log("No player inventory found");
-                }
             }, (fail) => {
-
+                Debug.Log("No Player Info found");
             }
         );
     }

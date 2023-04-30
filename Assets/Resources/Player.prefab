@@ -168,7 +168,7 @@ MonoBehaviour:
   - {r: 0.30196083, g: 0.58741504, b: 0.9529412, a: 1}
   - {r: 0.49043253, g: 0.9716981, b: 0.5474656, a: 1}
   downed: 0
-  playerInfo: {fileID: 0}
+  playerInfo: {fileID: 3952692831438460609}
   playerVicinity: {fileID: 0}
 --- !u!114 &3952692831438460609
 MonoBehaviour:
@@ -186,7 +186,7 @@ MonoBehaviour:
   _currentAmmo: 0
   _timeSurvived: 0
   _kills: 0
-  _down: 0
+  _isDown: 0
   _invincible: 0
   gettingUp: 0
   getUpTime: 5
@@ -279,12 +279,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletForce: 40
-  magazineCapacity: 9999
+  magazineCapacity: 20
   ammoCapacity: 9999
+  reloading: 0
+  reloadTimeLeft: 0
   playerTransform: {fileID: 3086555336521371885}
   firePoint: {fileID: 3086555336037950201}
   _cameraPrefab: {fileID: 7912000470374054472, guid: 1599a0db788fef245880001b9b5afc43, type: 3}
   _playerUIPrefab: {fileID: 513522659965210800, guid: 14c9e3a73d626cd47a116d538b23b506, type: 3}
+  playerInfo: {fileID: 3952692831438460609}
   aimMask:
     serializedVersion: 2
     m_Bits: 128

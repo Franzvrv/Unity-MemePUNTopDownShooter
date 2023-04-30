@@ -50,7 +50,7 @@ public class PlayerMovement : MonoBehaviourPun
         }
         if (Input.GetKeyDown(KeyCode.E)) {
             if (playerVicinity != null) {
-                if (playerVicinity.Down == true) {
+                if (playerVicinity.IsDown == true) {
                     playerVicinity.GetUp();
                 }
             }
