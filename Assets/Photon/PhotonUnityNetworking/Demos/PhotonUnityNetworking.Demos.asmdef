@@ -1,21 +1,10 @@
 {
     "name": "PhotonUnityNetworking.Demos",
-    "rootNamespace": "",
     "references": [
         "PhotonRealtime",
         "PhotonUnityNetworking",
-        "PhotonUnityNetworking.Utilities",
-        "PlayFab",
-        "PlayFabEditorExtensions",
-        "PlayFabSDKEditor"
+        "PhotonUnityNetworking.Utilities"
     ],
     "includePlatforms": [],
-    "excludePlatforms": [],
-    "allowUnsafeCode": true,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+    "excludePlatforms": []
 }
