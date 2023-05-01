@@ -156,7 +156,7 @@ public class PlayerInfo : MonoBehaviourPun, IPunObservable
                                 playerUI.SetMedkitText(item.RemainingUses.ToString());
                                 break;
                             case "AM":
-                                playerUI.SetAmmo(playerAim.MagazineCapacity, (int)item.RemainingUses);
+                                playerUI.SetAmmo(playerAim.MagazineCapacity.ToString(), item.RemainingUses.ToString());
                                 playerAim.AmmoCapacity = (int)item.RemainingUses;
                             break;
                         }

@@ -28,8 +28,8 @@ public class PlayerUI : MonoBehaviourPun
     }
 
     // Update is called once per frame
-    public void SetAmmo(int magazine, int ammo) {
-        ammoText.text = magazine + " / " + ammo;
+    public void SetAmmo(string magazine, string ammo) {
+        ammoText.text = magazine + "/" + ammo;
     }
 
     public void SetHealth(int health) {

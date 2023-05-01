@@ -78,16 +78,16 @@ public class PlayerAim : MonoBehaviourPun
 
     IEnumerator reloadCoroutine() {
         float reloadTimeLeft = reloadTime;
+        playerUI.SetAmmo("Re", "oading");
         reloading = true;
         while (reloading) {
             yield return new WaitForSeconds(1);
             reloadTimeLeft--;
             if (reloadTimeLeft <= 0) {
+                reloading = false;
+                magazineCapacity = maxMagazineCapacity;
                 InventoryManager.Instance.UseItem(InventoryManager.Item.AM, 1, () => {
-                    reloading = false;
-                    magazineCapacity = maxMagazineCapacity;
                     playerInfo.ResetInventory();
-                    reloading = false;
                 });
                 reloading = false;
                 yield break;
@@ -104,7 +104,7 @@ public class PlayerAim : MonoBehaviourPun
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
         bullet.GetComponent<Bullet>().Init(playerPhotonView.ViewID);
         rb.AddForce(firePoint.forward * bulletForce, ForceMode.Impulse);
-        playerUI.SetAmmo(magazineCapacity, ammoCapacity);
+        playerUI.SetAmmo(magazineCapacity.ToString(), ammoCapacity.ToString());
         
     }
 }
